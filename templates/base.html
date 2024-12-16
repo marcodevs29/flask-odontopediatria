@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Control</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav style="background-color: #333; padding: 1em;">
+        <!-- Se eliminó el enlace a 'dashboard' -->
+        <a href="{{ url_for('asistencia') }}" style="color: white; text-decoration: none; margin-right: 10px;">Control de Asistencia</a>
+        <a href="{{ url_for('pacientes') }}" style="color: white; text-decoration: none;">Gestión de Pacientes</a>
+        <a href="{{ url_for('descargar') }}" style="color: white; text-decoration: none; margin-left: 10px;">Descargar Base de Datos</a>
+    </nav>
+    <div style="margin: 20px;">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

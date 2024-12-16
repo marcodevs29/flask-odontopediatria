@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Gestión de Pacientes</h1>
+
+<!-- Formulario para registrar pacientes -->
+<form action="{{ url_for('pacientes') }}" method="POST" enctype="multipart/form-data">
+    <label>Nombre del Paciente:</label>
+    <input type="text" name="nombre" required><br>
+
+    <label>Edad:</label>
+    <input type="number" name="edad" required><br>
+
+    <label>Sexo:</label>
+    <select name="sexo">
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+    </select><br>
+
+    <label>Tratamiento a Realizar:</label>
+    <textarea name="tratamiento"></textarea><br>
+
+    <label>Índice de Higiene Oral:</label>
+    <input type="text" name="indice_higiene"><br>
+
+    <label>Órganos Dentarios Tratados:</label>
+    <input type="text" name="organos_tratados"><br>
+
+    <label>Tratamientos Realizados:</label>
+    <textarea name="tratamientos_realizados"></textarea><br>
+
+    <label>Observaciones:</label>
+    <textarea name="observaciones"></textarea><br>
+
+    <label>Evaluación del Profesor:</label>
+    <select name="evaluacion">
+        <option value="Excelente">Excelente</option>
+        <option value="Bueno">Bueno</option>
+        <option value="Regular">Regular</option>
+    </select><br>
+
+    <label>Número de Recibo de Pago:</label>
+    <input type="text" name="recibo_pago" required><br>
+
+    <label>Pago Verificado:</label>
+    <select name="estatus_pago" required>
+        <option value="Sí">Sí</option>
+        <option value="No">No</option>
+    </select><br>
+
+    <!-- Imágenes -->
+    <label>Foto Frente:</label>
+    <input type="file" name="foto_frente"><br>
+
+    <label>Foto Intraoral:</label>
+    <input type="file" name="foto_intraoral"><br>
+
+    <label>Foto Índice de Higiene Oral:</label>
+    <input type="file" name="foto_indice"><br>
+
+    <label>Foto Procedimiento:</label>
+    <input type="file" name="foto_procedimiento"><br>
+
+    <button type="submit">Guardar Información del Paciente</button>
+</form>
+
+<!-- Lista de pacientes -->
+<h2>Pacientes Registrados</h2>
+<table border="1">
+    <tr>
+        <th>Nombre</th>
+        <th>Edad</th>
+        <th>Sexo</th>
+        <th>Evaluación del Profesor</th>
+        <th>Tratamientos Realizados</th>
+        <th>Número de Recibo</th>
+        <th>Pago Verificado</th>
+        <th>Eliminar</th>
+    </tr>
+    {% for paciente in pacientes %}
+    <tr>
+        <td>{{ paciente[1] }}</td>
+        <td>{{ paciente[2] }}</td>
+        <td>{{ paciente[3] }}</td>
+        <td>{{ paciente[9] }}</td>
+        <td>{{ paciente[7] }}</td>
+        <td>{{ paciente[10] }}</td>
+        <td>{{ paciente[11] }}</td>
+        <td><a href="{{ url_for('eliminar_paciente', id=paciente[0]) }}">Eliminar</a></td>
+    </tr>
+    {% endfor %}
+</table>
+    <!-- Enlace para descargar la base de datos -->
+<p>
+    <a href="{{ url_for('descargar') }}" style="text-decoration: none; color: blue;">Descargar Base de Datos</a>
+</p>
+
+{% endblock %}

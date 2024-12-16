@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Control de Asistencia</h1>
+    <p>Aquí podrás registrar la asistencia de los estudiantes y pacientes.</p>
+    
+    <!-- Formulario para registrar asistencia -->
+    <form method="POST" action="{{ url_for('asistencia') }}">
+        <div>
+            <label>Nombre del Estudiante:</label>
+            <input type="text" name="nombre_estudiante" required>
+        </div>
+        <div>
+            <label>Nombre del Paciente:</label>
+            <input type="text" name="nombre_paciente" required>
+        </div>
+        <div>
+            <label>Grupo:</label>
+            <select name="grupo" required>
+                <option value="" disabled selected>Selecciona el grupo</option>
+                <option value="9no ciclo">9no ciclo</option>
+                <option value="10mo ciclo">10mo ciclo</option>
+                <option value="11vo ciclo">11vo ciclo</option>
+            </select>
+        </div>
+        <div>
+            <label>Fecha:</label>
+            <input type="text" name="fecha" value="{{ fecha_actual }}" readonly>
+        </div>
+        <div>
+            <label>Hora:</label>
+            <input type="time" name="hora" required>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Registrar Asistencia</button>
+        </div>
+    </form>
+    
+    <!-- Tabla de asistencias registradas -->
+    <h2>Asistencias Registradas</h2>
+    <table border="1" class="table">
+        <thead>
+            <tr>
+                <th>Nombre del Estudiante</th>
+                <th>Nombre del Paciente</th>
+                <th>Grupo</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asistencia in asistencias %}
+            <tr>
+                <td>{{ asistencia[1] }}</td>
+                <td>{{ asistencia[2] }}</td>
+                <td>{{ asistencia[3] }}</td>
+                <td>{{ asistencia[4] }}</td>
+                <td>{{ asistencia[5] }}</td>
+                <td>
+                    <a href="{{ url_for('eliminar_asistencia', id=asistencia[0]) }}">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
