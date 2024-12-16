@@ -55,9 +55,9 @@ def init_db():
         conn.commit()
 
 # Ruta principal
-@app.route('/')
+@app.route("/")
 def index():
-    return redirect(url_for('pacientes'))
+    return "¡Hola desde Flask en Vercel!"
 
 # Ruta para gestión de pacientes
 @app.route('/pacientes', methods=['GET', 'POST'])
