@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Configuración de Supabase (PostgreSQL)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:brunorakan0729@rvrjnixqeffqbhgrvalj.supabase.co:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:brunorakan0729@rvrjnixqeffqbhrvalj.supabase.co:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'secret_key'
 
