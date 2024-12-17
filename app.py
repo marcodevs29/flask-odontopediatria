@@ -13,15 +13,6 @@ app.secret_key = 'secret_key'
 # Inicialización de la base de datos
 db = SQLAlchemy(app)
 
-# Probar la conexión
-@app.route('/test_db')
-def test_db():
-    try:
-        db.session.execute('SELECT 1')
-        return "Conexión exitosa a Supabase PostgreSQL"
-    except Exception as e:
-        return f"Error en la conexión: {str(e)}"
-    
 # Configuración de carga de archivos
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -138,8 +129,7 @@ def descargar():
     return send_file("gestion_clinica.db", as_attachment=True)
 
 # Inicializar la base de datos
-@app.before_first_request
-def create_tables():
+with app.app_context():
     db.create_all()
 
 if __name__ == "__main__":
