@@ -1,25 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from dotenv import load_dotenv
 import os
+
+# Cargar variables de entorno desde .env
+load_dotenv()
 
 app = Flask(__name__)
 
-# Configuración de Supabase (PostgreSQL)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:brunorakan0729@rvrjnixqeffqbhrvalj.supabase.co:5432/postgres'
+# Configuración de la base de datos desde variables de entorno
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'secret_key'
-
-# Inicialización de la base de datos
-db = SQLAlchemy(app)
+app.secret_key = os.getenv('SECRET_KEY')
 
 # Configuración de carga de archivos
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'static/uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
+
+# Inicialización de la base de datos
+db = SQLAlchemy(app)
 
 # MODELO: Pacientes
 class Paciente(db.Model):
@@ -61,14 +65,14 @@ def pacientes():
         tratamiento = request.form.get("tratamiento")
         indice_higiene = request.form.get("indice_higiene")
         observaciones = request.form.get("observaciones")
-        
+
         # Procesar imágenes
         foto_frente = request.files.get("foto_frente")
         filename_frente = None
         if foto_frente and '.' in foto_frente.filename:
             filename_frente = os.path.join(app.config['UPLOAD_FOLDER'], foto_frente.filename)
             foto_frente.save(filename_frente)
-        
+
         nuevo_paciente = Paciente(
             folio_expediente=folio_expediente,
             nombre=nombre,
@@ -86,47 +90,6 @@ def pacientes():
 
     pacientes = Paciente.query.all()
     return render_template("pacientes.html", pacientes=pacientes)
-
-# RUTA: Eliminar Paciente
-@app.route("/eliminar_paciente/<int:id>")
-def eliminar_paciente(id):
-    paciente = Paciente.query.get_or_404(id)
-    db.session.delete(paciente)
-    db.session.commit()
-    flash("Paciente eliminado correctamente.", "danger")
-    return redirect(url_for("pacientes"))
-
-# RUTA: Control de Asistencia
-@app.route("/asistencia", methods=["GET", "POST"])
-def asistencia():
-    fecha_actual = datetime.now().strftime("%d/%m/%Y")  # Fecha actual
-    if request.method == "POST":
-        matricula = request.form.get("matricula")
-        nombre_estudiante = request.form.get("nombre_estudiante")
-        folio_paciente = request.form.get("folio_paciente")
-        grupo = request.form.get("grupo")
-        hora = request.form.get("hora")
-
-        nueva_asistencia = Asistencia(
-            matricula=matricula,
-            nombre_estudiante=nombre_estudiante,
-            folio_paciente=folio_paciente,
-            grupo=grupo,
-            fecha=fecha_actual,
-            hora=hora
-        )
-        db.session.add(nueva_asistencia)
-        db.session.commit()
-        flash("Asistencia registrada correctamente.", "success")
-        return redirect(url_for("asistencia"))
-
-    asistencias = Asistencia.query.all()
-    return render_template("asistencia.html", asistencias=asistencias, fecha_actual=fecha_actual)
-
-# RUTA: Descargar base de datos
-@app.route("/descargar")
-def descargar():
-    return send_file("gestion_clinica.db", as_attachment=True)
 
 # Inicializar la base de datos
 with app.app_context():

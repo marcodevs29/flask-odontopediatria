@@ -1,0 +1,36 @@
+# Excluir el archivo .env que contiene variables sensibles
+.env
+
+# Archivos de entorno virtuales
+venv/
+env/
+*.pyc
+__pycache__/
+
+# Archivos de configuración específicos de IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de compilación
+*.log
+*.db
+
+# Node.js si usas algún frontend con npm
+node_modules/
+dist/
+build/
+
+# Archivos específicos de Python
+*.sqlite3
+*.pyo
+*.pyc
+
+# Archivos de despliegue específicos de Vercel o Heroku
+.vercel/
+*.pid
